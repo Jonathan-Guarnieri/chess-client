@@ -25,16 +25,20 @@ const Board = () => {
     return `${column}${row}`;
   };
 
-  const handleSquareClick = (index) => {
-    const square = keyToSquareName(index);
-    alert(`clicked on square ${square}`);
+  const handleDrop = (from, to, pieceCode) => {
+    setPieces((prev) => {
+      const newBoard = { ...prev };
+      delete newBoard[from];
+      newBoard[to] = pieceCode;
+      return newBoard;
+    });
   };
 
   return (
     <div style={{ width: boardSizeInPixels, height: boardSizeInPixels }} className="grid grid-cols-8 grid-rows-8">
       {[...Array(64)].map((_, index) => {
         const squareName = keyToSquareName(index);
-        const piece = pieces[squareName];
+        const pieceCode = pieces[squareName];
 
         return (
           <Square
@@ -42,10 +46,14 @@ const Board = () => {
             name={squareName}
             index={index}
             size={squareSizeInPixels}
-            onClick={() => handleSquareClick(index)}
+            onDropPiece={handleDrop}
           >
-            {piece && (
-              <Piece pieceCode={piece} size={squareSizeInPixels} />
+            {pieceCode && (
+              <Piece
+                pieceCode={pieceCode}
+                size={squareSizeInPixels}
+                from={squareName}
+              />
             )}
           </Square>
         );
