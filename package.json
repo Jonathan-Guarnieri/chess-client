@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rails/actioncable": "^8.0.200",
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dnd": "^16.0.1",
