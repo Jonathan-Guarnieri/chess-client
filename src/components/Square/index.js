@@ -1,11 +1,14 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 
-const Square = ({ name, index, size, onClick, onDropPiece, children }) => {
+const Square = ({ name, index, size, onClick, onDropPiece, children, sendMove }) => {
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: 'piece',
     drop: (item) => {
       onDropPiece(item.from, name, item.pieceCode);
+      const from = item.from;
+      const to = name;
+      sendMove(from, to);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),

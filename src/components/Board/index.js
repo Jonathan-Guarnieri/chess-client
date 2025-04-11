@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Square from '../Square';
 import Piece from '../Piece';
+import useChessCable from '@/hooks/useChessCable';
 
 const Board = () => {
   const squareSizeInPixels = 80;
@@ -34,6 +35,11 @@ const Board = () => {
     });
   };
 
+  const { sendMove } = useChessCable((isValid) => {
+    alert(isValid ? '✅ Movimento válido' : '❌ Movimento inválido');
+    // você pode atualizar o tabuleiro aqui se quiser
+  });
+
   return (
     <div style={{ width: boardSizeInPixels, height: boardSizeInPixels }} className="grid grid-cols-8 grid-rows-8">
       {[...Array(64)].map((_, index) => {
@@ -47,6 +53,7 @@ const Board = () => {
             index={index}
             size={squareSizeInPixels}
             onDropPiece={handleDrop}
+            sendMove={sendMove}
           >
             {pieceCode && (
               <Piece
