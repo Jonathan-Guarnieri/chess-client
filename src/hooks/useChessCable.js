@@ -19,7 +19,7 @@ export default function useChessCable(onMoveResult) {
       {
         received: (data) => {
           alert(`📩 Mensagem recebida: ${JSON.stringify(data)}`);
-          if (data.action === 'move_result') {
+          if (data.action === 'move_validator_result') {
             onMoveResult(data.valid);
           }
         },
