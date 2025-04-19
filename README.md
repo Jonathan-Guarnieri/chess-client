@@ -9,3 +9,9 @@ To handle with import errors:
 docker-compose down -v
 docker-compose build --no-cache
 docker-compose up
+
+
+TODO:
+- create a signup page
+- show logged player(s) nickname when playing
+- create menu (with an option to play vs another player (local or online))
