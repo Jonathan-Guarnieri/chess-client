@@ -12,6 +12,6 @@ docker-compose up
 
 
 TODO:
+- finish menu -> test multiplayer game
 - create a signup page
 - show logged player(s) nickname when playing
-- create menu (with an option to play vs another player (local or online))
