@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Square from '../Square';
 import Piece from '../Piece';
-import useChessCable from '@/hooks/useChessCable';
+import useApiCable from '@/hooks/useApiCable';
 
 const Board = () => {
   const squareSizeInPixels = 80;
@@ -35,7 +35,7 @@ const Board = () => {
     });
   };
 
-  const { sendMove } = useChessCable((isValid) => {
+  const { sendMove } = useApiCable((isValid) => {
     alert(isValid ? '✅ Movimento válido' : '❌ Movimento inválido');
     // você pode atualizar o tabuleiro aqui se quiser
   });

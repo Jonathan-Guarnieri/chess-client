@@ -5,7 +5,7 @@ import { createConsumer } from "@rails/actioncable";
  * Hook que conecta ao ActionCable e permite enviar movimentos de xadrez.
  * @param {Function} onMoveResult - Callback chamado com `true` ou `false` após resposta do backend.
  */
-export default function useChessCable(onMoveResult) {
+export default function useApiCable(onMoveResult) {
   const cableRef = useRef(null);
   const subscriptionRef = useRef(null);
 
