@@ -1,51 +1,51 @@
-import { useEffect, useRef } from 'react';
+import { use, useEffect, useRef } from 'react';
 import { createConsumer } from "@rails/actioncable";
 
-/**
- * Hook que conecta ao ActionCable e permite enviar movimentos de xadrez.
- * @param {Function} onMoveResult - Callback chamado com `true` ou `false` após resposta do backend.
- */
-export default function useApiCable(onMoveResult) {
+export default function useApiCable(channel, gameId, onMessageReceived) {
   const cableRef = useRef(null);
   const subscriptionRef = useRef(null);
+  const callbackRef = useRef(onMessageReceived);
 
   useEffect(() => {
-    // Conecta ao ActionCable no endpoint padrão Rails
-    cableRef.current = createConsumer('ws://localhost:3000/cable');
+    callbackRef.current = onMessageReceived;
+  }, [onMessageReceived]);
 
-    // Cria a subscription ao canal "ChessChannel"
+  useEffect(() => {
+    cableRef.current = createConsumer(`${process.env.NEXT_PUBLIC_SOCKET_URL}/cable`);
+
     subscriptionRef.current = cableRef.current.subscriptions.create(
-      { channel: 'GameChannel' },
       {
-        received: (data) => {
-          alert(`📩 Mensagem recebida: ${JSON.stringify(data)}`);
-          if (data.action === 'move_validator_result') {
-            onMoveResult(data.valid);
-          }
-        },
+        channel: channel,
+        id: gameId
+
+      },
+      {
         connected() {
-          alert('♟️ Conectado ao canal de xadrez');
+          console.log(`Connected to the channel: ${channel} for game: ${gameId}`);
         },
         disconnected() {
-          alert('🔌 Desconectado do canal de xadrez');
+          console.log(`Disconnected from the channel: ${channel}`);
+        },
+        received(data) {
+          onMessageReceived(data);
+          callbackRef.current(data);
         }
       }
     );
 
-    // Limpa a conexão ao desmontar o componente
     return () => {
       subscriptionRef.current?.unsubscribe();
       cableRef.current?.disconnect();
     };
-  }, []);
+  }, [channel, gameId]);
 
-  const sendMove = (from, to) => {
-    subscriptionRef.current?.send({
-      action: 'move',
-      from,
-      to
-    });
+  const sendMessage = (message) => {
+    if (subscriptionRef.current) {
+      subscriptionRef.current.send(message);
+    } else {
+      console.error('Subscription is not ready yet.');
+    }
   };
 
-  return { sendMove };
+  return { sendMessage };
 }

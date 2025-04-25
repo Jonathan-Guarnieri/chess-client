@@ -8,7 +8,7 @@ export default function Menu() {
   function startMultiplayerGame () {
     // Join on matchmaking
     alert('Searching for an oponent...');
-    // TODO: implement matchmaking logic   <--------------------- CONTINUAR DAQUI
+    // TODO: implement matchmaking logic
 
     // Redirect to game page when ready to play
     alert('Oponent found! Click OK to start the game');

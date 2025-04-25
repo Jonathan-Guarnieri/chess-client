@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Square from '../Square';
 import Piece from '../Piece';
-import useApiCable from '@/hooks/useApiCable';
+import useMakeMove from '@/hooks/useMakeMove';
 
 const Board = () => {
   const squareSizeInPixels = 80;
@@ -26,19 +26,11 @@ const Board = () => {
     return `${column}${row}`;
   };
 
+  const GameId = 1; // TODO: Replace with actual game ID
+  const { makeMove } = useMakeMove(GameId, setPieces);
   const handleDrop = (from, to, pieceCode) => {
-    setPieces((prev) => {
-      const newBoard = { ...prev };
-      delete newBoard[from];
-      newBoard[to] = pieceCode;
-      return newBoard;
-    });
+    makeMove(from, to, pieceCode);
   };
-
-  const { sendMove } = useApiCable((isValid) => {
-    alert(isValid ? '✅ Movimento válido' : '❌ Movimento inválido');
-    // você pode atualizar o tabuleiro aqui se quiser
-  });
 
   return (
     <div style={{ width: boardSizeInPixels, height: boardSizeInPixels }} className="grid grid-cols-8 grid-rows-8">
@@ -53,7 +45,6 @@ const Board = () => {
             index={index}
             size={squareSizeInPixels}
             onDropPiece={handleDrop}
-            sendMove={sendMove}
           >
             {pieceCode && (
               <Piece
