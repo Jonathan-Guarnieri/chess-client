@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/axios';
+import apiClient from '@/lib/apiClient';
 
 export const useAxiosAuthInterceptor = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const interceptor = api.interceptors.response.use(
+    const interceptor = apiClient.interceptors.response.use(
       res => res,
       err => {
         if (err.response?.status === 401) {
@@ -17,7 +17,7 @@ export const useAxiosAuthInterceptor = () => {
     );
 
     return () => {
-      api.interceptors.response.eject(interceptor);
+      apiClient.interceptors.response.eject(interceptor);
     };
   }, [router]);
 };

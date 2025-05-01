@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/axios';
+import apiClient from '@/lib/apiClient';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await api.post(
+    const response = await apiClient.post(
       '/login',
       {
         "user": {
@@ -24,7 +24,6 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
       }
     );
 
