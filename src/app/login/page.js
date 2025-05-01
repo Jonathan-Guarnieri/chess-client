@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import api from '@/lib/axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,10 +11,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Sending login: ${email} | ${password}\nto ${process.env.NEXT_PUBLIC_API_URL}/login`);
 
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/login`,
+    const response = await api.post(
+      '/login',
       {
         "user": {
           "email": email,
