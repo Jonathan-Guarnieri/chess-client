@@ -1,21 +1,29 @@
 'use client';
 
 import { useAxiosAuthInterceptor } from '@/hooks/useAxiosAuthInterceptor';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext, createContext } from 'react';
 import apiClient from '@/lib/apiClient';
 import LoadingPage from '@/components/LoadingPage';
+
+const AuthContext = createContext(null);
+
+export const useAuth = () => useContext(AuthContext);
 
 export default function AuthWrapper({ children }) {
   useAxiosAuthInterceptor();
 
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        await apiClient.get('/me');
+        const response = await apiClient.get('/me');
+        setUser(response.data);
       } catch (err) {
-        console.error('[AuthWrapper] Failed to verify session via /me:', err);
+        if (err?.response?.status !== 401) {
+          console.error('[AuthWrapper] Failed to verify session via /me:', err);
+        }
       } finally {
         setLoading(false);
       }
@@ -26,5 +34,9 @@ export default function AuthWrapper({ children }) {
 
   if (loading) return <LoadingPage />;
 
-  return <>{children}</>;
+  return (
+    <AuthContext.Provider value={{ user }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
