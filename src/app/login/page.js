@@ -19,11 +19,6 @@ export default function Login() {
           "email": email,
           "password": password
         }
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
       }
     );
 
