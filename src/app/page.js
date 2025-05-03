@@ -1,25 +1,33 @@
-'use client';
+'use client'
 
-import Board from "@/components/Board";
-import Player from "@/components/Player";
-import { useAuth } from "@/components/AuthWrapper";
+import { useRouter } from 'next/navigation';
 
-export default function Home() {
-  const { user } = useAuth();
-  if (!user?.data?.attributes) return null;
+export default function Menu() {
+  const router = useRouter();
 
-  const playerBottom = user.data.attributes;
-  const playerTop = {
-    id: 2,
-    email: 'opponent@email.com',
-    nickname: 'opponent',
-  };
+  function startMultiplayerGame () {
+    // Join on matchmaking
+    alert('Searching for an oponent...');
+    // TODO: implement matchmaking logic
+
+    // Redirect to game page when ready to play
+    alert('Oponent found! Click OK to start the game');
+    router.push('/game');
+  }
 
   return (
     <main>
-      <Player player={playerTop} />
-      <Board />
-      <Player player={playerBottom} />
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <button className="bg-gray-500 text-white px-6 py-3 rounded shadow-md hover:bg-gray-600 transition-all duration-300 mb-4">
+          Singleplayer
+        </button>
+        <button
+          className="bg-gray-500 text-white px-6 py-3 rounded shadow-md hover:bg-gray-600 transition-all duration-300"
+          onClick={startMultiplayerGame}
+        >
+          Multiplayer
+        </button>
+      </div>
     </main>
-  );
+  )
 }
