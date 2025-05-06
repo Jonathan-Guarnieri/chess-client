@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import useApiCable from './useApiCable';
+import useApiCable from '@/hooks/useApiCable';
 
 export default function useMakeMove(gameId, setPieces) {
   const pieceRef = useRef({ from: null, to: null, pieceCode: null });
-
-  const { sendMessage } = useApiCable('GameChannel', gameId, callbackHandler);
+  const opts = { gameId }
+  const { sendMessage } = useApiCable('GameChannel', callbackHandler, opts);
 
   function callbackHandler(data) {
     const { from, to, pieceCode } = pieceRef.current;

@@ -1,7 +1,7 @@
-import { use, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createConsumer } from "@rails/actioncable";
 
-export default function useApiCable(channel, gameId, onMessageReceived) {
+export default function useApiCable(channel, onMessageReceived, opts=null) {
   const cableRef = useRef(null);
   const subscriptionRef = useRef(null);
   const callbackRef = useRef(onMessageReceived);
@@ -16,12 +16,11 @@ export default function useApiCable(channel, gameId, onMessageReceived) {
     subscriptionRef.current = cableRef.current.subscriptions.create(
       {
         channel: channel,
-        id: gameId
-
+        opts: opts
       },
       {
         connected() {
-          console.log(`Connected to the channel: ${channel} for game: ${gameId}`);
+          console.log(`Connected to the channel: ${channel} with opts: ${JSON.stringify(opts, null, 2)}`);
         },
         disconnected() {
           console.log(`Disconnected from the channel: ${channel}`);
@@ -37,7 +36,7 @@ export default function useApiCable(channel, gameId, onMessageReceived) {
       subscriptionRef.current?.unsubscribe();
       cableRef.current?.disconnect();
     };
-  }, [channel, gameId]);
+  }, [channel, opts]);
 
   const sendMessage = (message) => {
     if (subscriptionRef.current) {
