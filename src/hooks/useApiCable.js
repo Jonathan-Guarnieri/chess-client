@@ -27,7 +27,6 @@ export default function useApiCable(channel, onMessageReceived, opts=null) {
         },
         received(data) {
           onMessageReceived(data);
-          callbackRef.current(data);
         }
       }
     );
