@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react';
-import MultiplayerConnection from './MultiplayerConnection';
+import { useRouter } from 'next/navigation';
 
 export default function MultiplayerButton() {
-  const [connecting, setConnecting] = useState(false)
+  const router = useRouter();
 
   function handleClick() {
-    setConnecting(true);
+    router.push('/queue');
   }
 
   return (
@@ -18,7 +17,6 @@ export default function MultiplayerButton() {
       >
         Multiplayer
       </button>
-      {connecting && <MultiplayerConnection />}
     </>
   );
 }
