@@ -22,7 +22,7 @@ export default function useMultiplayerConnection(callbackHandler) {
   }
 
   // Initialize WebSocket connection
-  const { sendMessage } = useApiCable('MatchmakerChannel', (data) => {
+  const { sendMessage, unsubscribe } = useApiCable('MatchmakerChannel', (data) => {
     callbackHandler(data);
   });
 
@@ -50,5 +50,12 @@ export default function useMultiplayerConnection(callbackHandler) {
     };
   }, []); // Empty dependency array = runs once on mount
 
-  return null;
+  const disconnect = () => {
+    enqueuedRef.current = false;
+    clearInterval(keepAliveIntervalRef.current);
+    unsubscribe?.();
+    console.log('[useMultiplayerConnection] Disconnected');
+  };
+
+  return { disconnect };
 }

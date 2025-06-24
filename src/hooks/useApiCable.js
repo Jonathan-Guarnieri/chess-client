@@ -32,8 +32,7 @@ export default function useApiCable(channel, onMessageReceived, opts=null) {
     );
 
     return () => {
-      subscriptionRef.current?.unsubscribe();
-      cableRef.current?.disconnect();
+      unsubscribe();
     };
   }, [channel, opts]);
 
@@ -45,5 +44,15 @@ export default function useApiCable(channel, onMessageReceived, opts=null) {
     }
   };
 
-  return { sendMessage };
+  const unsubscribe = () => {
+    try {
+      subscriptionRef.current?.unsubscribe();
+      cableRef.current?.disconnect();
+      console.log(`Unsubscribed from channel: ${channel}`);
+    } catch (e) {
+      console.error('Error during unsubscribe:', e);
+    }
+  };
+
+  return { sendMessage, unsubscribe };
 }

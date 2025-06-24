@@ -28,6 +28,7 @@ export default function OnQueue() {
   const handleGameStart = () => {
     enqueuedRef.current = false;
     router.push('/game');
+    disconnect?.();
   }
 
   function callbackHandler(data) {
@@ -39,7 +40,7 @@ export default function OnQueue() {
     }
   };
 
-  useMultiplayerConnection(callbackHandler);
+  const { disconnect } = useMultiplayerConnection(callbackHandler);
 
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-900">
