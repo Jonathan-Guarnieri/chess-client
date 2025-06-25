@@ -5,9 +5,7 @@ import { useEffect, useState, useContext, createContext } from 'react';
 import apiClient from '@/lib/apiClient';
 import LoadingPage from '@/components/LoadingPage';
 
-const AuthContext = createContext(null);
-
-export const useAuth = () => useContext(AuthContext);
+export const AuthContext = createContext(null);
 
 export default function AuthWrapper({ children }) {
   useAxiosAuthInterceptor();
